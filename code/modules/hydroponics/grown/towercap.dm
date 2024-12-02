@@ -239,9 +239,9 @@
 	if(mover.throwing)
 		return TRUE
 
-/obj/structure/bonfire/attackby(obj/item/W, mob/living/user, params)
-	if(istype(W, /obj/item/stack/rods) && !can_buckle && !grill)
-		var/obj/item/stack/rods/R = W
+/obj/structure/bonfire/attackby(obj/item/used_item, mob/living/user, params)
+	if(istype(used_item, /obj/item/stack/rods) && !can_buckle && !grill)
+		var/obj/item/stack/rods/R = used_item
 		var/choice = input(user, "What would you like to construct?", "Bonfire") as null|anything in list("Stake","Grill")
 		switch(choice)
 			if("Stake")
@@ -260,19 +260,21 @@
 				add_overlay("bonfire_grill")
 			else
 				return ..()
-	if(W.is_hot())
+	if(used_item.is_hot())
 		StartBurning()
 	if(grill)
-		if(!user.combat_mode && !(W.item_flags & ABSTRACT))
-			if(user.temporarilyRemoveItemFromInventory(W))
-				W.forceMove(get_turf(src))
-				var/list/click_params = params2list(params)
+		if(istype(used_item, /obj/item/melee/roastingstick))
+			return FALSE
+		if(!user.combat_mode && !(used_item.item_flags & ABSTRACT))
+			if(user.temporarilyRemoveItemFromInventory(used_item))
+				used_item.forceMove(get_turf(src))
+				var/list/modifiers = params2list(params)
 				//Center the icon where the user clicked.
-				if(!click_params || !click_params["icon-x"] || !click_params["icon-y"])
+				if(!LAZYACCESS(modifiers, ICON_X) || !LAZYACCESS(modifiers, ICON_Y))
 					return
 				//Clamp it so that the icon never moves more than 16 pixels in either direction (thus leaving the table turf)
-				W.pixel_x = clamp(text2num(click_params["icon-x"]) - 16, -(world.icon_size/2), world.icon_size/2)
-				W.pixel_y = clamp(text2num(click_params["icon-y"]) - 16, -(world.icon_size/2), world.icon_size/2)
+				used_item.pixel_x = used_item.base_pixel_x + clamp(text2num(LAZYACCESS(modifiers, ICON_X)) - 16, -(ICON_SIZE_X/2), ICON_SIZE_X/2)
+				used_item.pixel_y = used_item.base_pixel_y + clamp(text2num(LAZYACCESS(modifiers, ICON_Y)) - 16, -(ICON_SIZE_Y/2), ICON_SIZE_Y/2)
 		else
 			return ..()
 

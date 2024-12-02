@@ -1,7 +1,6 @@
 SUBSYSTEM_DEF(overlays)
 	name = "Overlay"
 	flags = SS_NO_FIRE|SS_NO_INIT
-
 	var/list/stats
 
 /datum/controller/subsystem/overlays/PreInit()
@@ -18,7 +17,7 @@ SUBSYSTEM_DEF(overlays)
 /// Don't have access to that type tho, so this is the best you're gonna get
 /proc/overlays2text(list/overlays)
 	var/list/unique_overlays = list()
-	// As anything because we're basically doing type coerrsion, rather then actually filtering for mutable apperances
+	// As anything because we're basically doing type coercion, rather then actually filtering for mutable appearances
 	for(var/mutable_appearance/overlay as anything in overlays)
 		var/key = "[overlay.icon]-[overlay.icon_state]-[overlay.dir]"
 		unique_overlays[key] += 1
@@ -47,12 +46,12 @@ SUBSYSTEM_DEF(overlays)
 			continue
 		if (istext(overlay))
 			// This is too expensive to run normally but running it during CI is a good test
-			// if (PERFORM_ALL_TESTS(focus_only/invalid_overlays))
-			// 	var/list/icon_states_available = icon_states(icon)
-			// 	if(!(overlay in icon_states_available))
-			// 		var/icon_file = "[icon]" || "Unknown Generated Icon"
-			// 		stack_trace("Invalid overlay: Icon object '[icon_file]' [REF(icon)] used in '[src]' [type] is missing icon state [overlay].")
-			// 		continue
+			if (PERFORM_ALL_TESTS(focus_only/invalid_overlays))
+				var/list/icon_states_available = icon_states(icon)
+				if(!(overlay in icon_states_available))
+					var/icon_file = "[icon]" || "Unknown Generated Icon"
+					stack_trace("Invalid overlay: Icon object '[icon_file]' [REF(icon)] used in '[src]' [type] is missing icon state [overlay].")
+					continue
 
 			var/index = build_overlays.Find(overlay)
 			build_overlays[index] = iconstate2appearance(icon, overlay)
@@ -80,14 +79,14 @@ SUBSYSTEM_DEF(overlays)
 /atom/proc/add_overlay(list/add_overlays)
 	if(!overlays)
 		return
-
 	STAT_START_STOPWATCH
 	overlays += build_appearance_list(add_overlays)
+	VALIDATE_OVERLAY_LIMIT(src)
 	POST_OVERLAY_CHANGE(src)
 	STAT_STOP_STOPWATCH
 	STAT_LOG_ENTRY(SSoverlays.stats, type)
 
-/atom/proc/copy_overlays(atom/other, cut_old)	//copys our_overlays from another atom
+/atom/proc/copy_overlays(atom/other, cut_old) //copys our_overlays from another atom
 	if(!other)
 		if(cut_old)
 			cut_overlays()
@@ -100,11 +99,13 @@ SUBSYSTEM_DEF(overlays)
 			overlays = cached_other
 		else
 			overlays = null
+		VALIDATE_OVERLAY_LIMIT(src)
 		POST_OVERLAY_CHANGE(src)
 		STAT_STOP_STOPWATCH
 		STAT_LOG_ENTRY(SSoverlays.stats, type)
 	else if(cached_other)
 		overlays += cached_other
+		VALIDATE_OVERLAY_LIMIT(src)
 		POST_OVERLAY_CHANGE(src)
 		STAT_STOP_STOPWATCH
 		STAT_LOG_ENTRY(SSoverlays.stats, type)
@@ -134,6 +135,7 @@ SUBSYSTEM_DEF(overlays)
 	else if(cut_old)
 		cut_overlays()
 
+// Debug procs
 
 /atom
 	/// List of overlay "keys" (info about the appearance) -> mutable versions of static appearances

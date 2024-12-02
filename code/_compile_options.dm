@@ -85,7 +85,3 @@
 		#warn Consider switching to VSCode editor instead, where you can press Ctrl+Shift+B to build.
 	#endif
 #endif
-
-// A reasonable number of maximum overlays an object needs
-// If you think you need more, rethink it
-#define MAX_ATOM_OVERLAYS 100
