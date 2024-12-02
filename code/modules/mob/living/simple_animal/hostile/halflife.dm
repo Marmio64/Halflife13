@@ -658,3 +658,55 @@
 	damage_type = BURN
 	nodamage = FALSE
 	hitsound = 'sound/creatures/halflife/antlion_worker/antlion_shoot.ogg'
+
+/mob/living/simple_animal/hostile/halflife/viscerator
+	name = "viscerator"
+	desc = "A small, twin-bladed machine capable of inflicting very deadly lacerations."
+	icon_state = "viscerator_attack"
+	icon_living = "viscerator_attack"
+	pass_flags = PASSTABLE | PASSMOB | PASSCOMPUTER
+	combat_mode = TRUE
+	mob_biotypes = MOB_ROBOTIC
+	health = 45
+	maxHealth = 45
+	rapid_melee = 2
+	melee_damage_lower = 15
+	melee_damage_upper = 20
+	attack_vis_effect = ATTACK_EFFECT_SLASH
+	wound_bonus = -10
+	bare_wound_bonus = 15
+	sharpness = SHARP_EDGED
+	obj_damage = 0
+	environment_smash = ENVIRONMENT_SMASH_NONE
+	attacktext = "cuts"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+	faction = list("combine")
+	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
+	minbodytemp = 0
+	mob_size = MOB_SIZE_TINY
+	movement_type = FLYING
+	move_to_delay = 2 //super fast spinny death machine
+	limb_destroyer = 1
+	speak_emote = list("states")
+	bubble_icon = BUBBLE_SYNDIBOT
+	gold_core_spawnable = HOSTILE_SPAWN
+	del_on_death = 1
+	deathmessage = "is smashed into pieces!"
+	var/operating_power = 100
+	var/low_power_melee_damage_lower = 8
+	var/low_power_melee_damage_upper = 14
+
+/mob/living/simple_animal/hostile/halflife/viscerator/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/swarming)
+
+/mob/living/simple_animal/hostile/halflife/viscerator/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	..()
+	if(stat)
+		return
+	if(operating_power < 1)
+		//Viscerators will eventually run low on power and deal less damage.
+		melee_damage_lower = low_power_melee_damage_lower
+		melee_damage_upper = low_power_melee_damage_upper
+	else
+		operating_power--

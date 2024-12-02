@@ -27,7 +27,7 @@
 	name = "viscerator delivery grenade"
 	desc = "An offline viscerator. Activate and throw, and it will automatically deploy and hunt down any non-command or civil protection."
 	icon_state = "manhack"
-	spawner_type = /mob/living/simple_animal/hostile/viscerator
+	spawner_type = /mob/living/simple_animal/hostile/halflife/viscerator
 	deliveryamt = 1
 
 /obj/item/grenade/spawnergrenade/spesscarp
