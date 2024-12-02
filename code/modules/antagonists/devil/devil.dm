@@ -186,7 +186,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 	soulsOwned += soul
 	owner.current.set_nutrition(NUTRITION_LEVEL_FULL)
 	to_chat(owner.current, span_warning("You feel satiated as you received a new soul."))
-	update_hud()
 	switch(SOULVALUE)
 		if(0)
 			to_chat(owner.current, span_warning("Your hellish powers have been restored."))
@@ -202,7 +201,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 	if(soulsOwned.Remove(soul))
 		check_regression()
 		to_chat(owner.current, span_warning("You feel as though a soul has slipped from your grasp."))
-		update_hud()
 
 /datum/antagonist/devil/proc/check_regression()
 	if(form == ARCH_DEVIL)
@@ -237,7 +235,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 	give_appropriate_spells()
 	qdel(D)
 	form = BLOOD_LIZARD
-	update_hud()
 
 
 /datum/antagonist/devil/proc/increase_blood_lizard()
@@ -269,7 +266,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 	A.set_name()
 	give_appropriate_spells()
 	form = TRUE_DEVIL
-	update_hud()
 
 /datum/antagonist/devil/proc/increase_arch_devil()
 	if(!ascendable)
@@ -453,7 +449,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 	message_admins("[key_name_admin(owner)] (true name is: [truename]) is resurrecting using hellish energy.</a>")
 	if(SOULVALUE < ARCH_THRESHOLD || !ascendable) // once ascended, arch devils do not go down in power by any means.
 		reviveNumber += LOSS_PER_DEATH
-		update_hud()
 	if(body)
 		body.revive(TRUE, TRUE) //Adminrevive also recovers organs, preventing someone from resurrecting without a heart.
 		if(istype(body.loc, /obj/effect/dummy/phased_mob))
@@ -503,16 +498,9 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 				if(SOULVALUE >= ARCH_THRESHOLD && ascendable)
 					A.convert_to_archdevil()
 		give_appropriate_spells()
-		update_hud()
 	else
 		CRASH("Unable to find a blobstart landmark for hellish resurrection")
 
-
-/datum/antagonist/devil/proc/update_hud()
-	if(iscarbon(owner.current))
-		var/mob/living/C = owner.current
-		if(C.hud_used && C.hud_used.devilsouldisplay)
-			C.hud_used.devilsouldisplay.update_counter(SOULVALUE)
 
 /datum/antagonist/devil/greet()
 	to_chat(owner.current, span_warning("<b>You remember your link to the infernal.  You are [truename], an agent of hell, a devil.  And you were sent to the plane of creation for a reason.  A greater purpose.  Convince the crew to sin, and embroiden Hell's grasp.</b>"))
@@ -549,7 +537,6 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 /datum/antagonist/devil/apply_innate_effects(mob/living/mob_override)
 	give_appropriate_spells()
 	owner.current.grant_all_languages(TRUE, TRUE, TRUE, LANGUAGE_DEVIL)
-	update_hud()
 	.=..()
 
 /datum/antagonist/devil/remove_innate_effects(mob/living/mob_override)

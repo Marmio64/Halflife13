@@ -896,7 +896,7 @@
 /atom/movable/proc/on_changed_z_level(turf/old_turf, turf/new_turf, same_z_layer, notify_contents = TRUE)
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_MOVABLE_Z_CHANGED, old_turf, new_turf, same_z_layer)
-	
+
 	// If our turfs are on different z "layers", recalc our planes
 	if(!same_z_layer && !QDELETED(src))
 		SET_PLANE(src, PLANE_TO_TRUE(src.plane), new_turf)

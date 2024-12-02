@@ -41,9 +41,6 @@
 	zone_select.icon = ui_style
 	zone_select.update_appearance(UPDATE_ICON)
 
-	devilsouldisplay = new /atom/movable/screen/devil/soul_counter(src)
-	infodisplay += devilsouldisplay
-
 
 /datum/hud/devil/persistent_inventory_update()
 	if(!mymob)

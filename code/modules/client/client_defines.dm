@@ -17,6 +17,10 @@
 	///Used for admin AI interaction
 	var/AI_Interact = FALSE
 
+	/// Does this client's mob need to rebuild its plane masters after login?
+	/// This is currently only used so a client can switch between 515 and 516 without breaking their rendering.
+	var/rebuild_plane_masters = FALSE
+
  	///Used to cache this client's bans to save on DB queries
 	var/ban_cache = null
  	///Contains the last message sent by this client - used to protect against copy-paste spamming.

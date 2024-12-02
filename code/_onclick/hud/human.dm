@@ -40,7 +40,6 @@
 	icon = 'icons/mob/screen_gen.dmi'
 	name = "souls owned"
 	icon_state = "Devil-6"
-	screen_loc = ui_devilsouldisplay
 
 /atom/movable/screen/devil/soul_counter/proc/update_counter(souls)
 	invisibility = 0
@@ -292,9 +291,6 @@
 	pull_icon.update_appearance(UPDATE_ICON)
 	pull_icon.screen_loc = ui_above_intent
 	static_inventory += pull_icon
-
-	devilsouldisplay = new /atom/movable/screen/devil/soul_counter(src)
-	infodisplay += devilsouldisplay
 
 	zone_select =  new /atom/movable/screen/zone_sel(src)
 	zone_select.icon = ui_style

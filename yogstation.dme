@@ -206,6 +206,7 @@
 #include "code\__DEFINES\dcs\signals\signals_movetype.dm"
 #include "code\__DEFINES\dcs\signals\signals_nanite.dm"
 #include "code\__DEFINES\dcs\signals\signals_object.dm"
+#include "code\__DEFINES\dcs\signals\signals_plane_master_group.dm"
 #include "code\__DEFINES\dcs\signals\signals_song.dm"
 #include "code\__DEFINES\dcs\signals\signals_spell.dm"
 #include "code\__DEFINES\dcs\signals\signals_storage.dm"

@@ -296,7 +296,12 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 
 	if(GLOB.player_details[ckey])
 		player_details = GLOB.player_details[ckey]
+		var/old_version = player_details.byond_version
 		player_details.byond_version = full_version
+
+		if(old_version != byond_version)
+			rebuild_plane_masters = TRUE
+
 	else
 		player_details = new
 		player_details.byond_version = full_version
